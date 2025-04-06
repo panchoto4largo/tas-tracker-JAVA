@@ -1,12 +1,12 @@
 package createTask;
 
 import java.io.*;
-import java.nio.file.Files;
 import java.util.*;
 import java.text.SimpleDateFormat;
 
 
 import createJson.JsonEmpty;
+import createJson.ObtainJsonBody;
 import bodyProgram.FilePath;
 
 public class CreateJsonTask extends FilePath{
@@ -61,7 +61,6 @@ public class CreateJsonTask extends FilePath{
     }
 	
 	private void implementsTask(String str) {
-		ArrayList<Object> tasksList = new ArrayList<>();
 		File file = new File(filePath);
 		
 		JsonEmpty jsonEmptiness = new JsonEmpty();
@@ -77,38 +76,16 @@ public class CreateJsonTask extends FilePath{
 			}
 		}
 		else {
-			try {
-				StringBuilder sb = new StringBuilder();
-				
-				BufferedReader reader = new BufferedReader(new FileReader(filePath));
-				String line;
-				while((line = reader.readLine()) != null) {
-					sb.append(line);
-				}
-				reader.close();
-				
-				String content = sb.toString();
-				if (content.startsWith("[") && content.endsWith("]")) {
-	                content = content.substring(1, content.length() - 1);
-	            }
-				String[] parts = content.split(",");
-				
-				if (!content.isEmpty()) {
-                    content += "," + str;
-                } else {
-                    content = str;
-                }
-				
-				try (FileWriter writer = new FileWriter(file)) {
-                    writer.write("[" + content + "]");
-                }
-			} catch (FileNotFoundException e) {
+			ObtainJsonBody body = new ObtainJsonBody();
+			String content = body.JsonBody(str); 
+			try (FileWriter writer = new FileWriter(file)) {
+                writer.write("[" + content + "]");
+            }catch (FileNotFoundException e) {
+			e.printStackTrace();
+            } catch (IOException e) {
 				e.printStackTrace();
-			}catch (IOException e) {
-				e.printStackTrace();
-			}
+			}	
 		}
-		
 	}
 	
 	
