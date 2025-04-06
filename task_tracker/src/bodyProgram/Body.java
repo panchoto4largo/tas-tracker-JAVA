@@ -29,7 +29,7 @@ public class Body {
 	    boolean x = true;
 	    while (x) {
 	        System.out.println("What do you want to do");
-	        System.out.println("1. Create a task \n2. Modify a task \n3. Delete a task "
+	        System.out.println(" 1. Create a task \n2. Modify a task \n3. Delete a task "
 	            + "\n4. Mark in progress \n5. Mark complete"
 	            + "\n6. List tasks"
 	            + "\n7. Close the program");
@@ -53,10 +53,10 @@ public class Body {
 	                new DeleteJsonTask();
 	                break;
 	            case 4:
-	                new ModifyJsonTask();
+	                new ChangeStatement(4);
 	                break;
 	            case 5:
-	                new ModifyJsonTask();
+	            	new ChangeStatement(5);
 	                break;
 	            case 6:
 	                System.out.println("1. List all tasks \n 2. List done tasks \n 3. List in-progress tasks \n 4. List undone tasks");

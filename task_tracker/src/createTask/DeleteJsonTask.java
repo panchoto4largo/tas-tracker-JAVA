@@ -14,9 +14,7 @@ public class DeleteJsonTask extends FilePath{
 
 		List<Map<String, Object>> jsonList = ShowList.returnAllTask();
 		
-		jsonList = taskToDelete(jsonList);
-		
-		String jsonStr = ParseJson.jsonString(jsonList);
+		String jsonStr = taskToDelete(jsonList);
 		
 		try {
 			FileWriter writer = new FileWriter(file);
@@ -29,26 +27,28 @@ public class DeleteJsonTask extends FilePath{
 		System.out.println("The task has been eliminated.\n");
 	}
 	
-	private List<Map<String, Object>> taskToDelete(List<Map<String, Object>> jsonList) {
-		Scanner sc = new Scanner(System.in);
-		boolean taskFound = false;
-		
-		System.out.println("\nWhich task do you want to delete? \n");
-		ShowList show = new ShowList(1);
-		String task = sc.nextLine();
-		
-		for (Iterator<Map<String, Object>> iterator = jsonList.iterator(); iterator.hasNext(); ) {
-		    Map<String, Object> json = iterator.next();
-		    
-		    if (json.get("description").equals(task)) {
-		        iterator.remove();
-		        taskFound = true;
-		        break;
-		    }
-		}
-		if (!taskFound) {
-            System.out.println("Task not found: " + task);
-        }
-		return jsonList;
-	}
+	private String taskToDelete(List<Map<String, Object>> jsonList) {
+ 		Scanner sc = new Scanner(System.in);
+ 		boolean taskFound = false;
+ 		
+ 		System.out.println("\nWhich task do you want to delete? \n");
+ 		ShowList show = new ShowList(1);
+ 		String task = sc.nextLine();
+ 
+ 		for (Iterator<Map<String, Object>> iterator = jsonList.iterator(); iterator.hasNext(); ) {
+ 		    Map<String, Object> json = iterator.next();
+ 		    
+ 		    if (json.get("description").equals(task)) {
+ 		        iterator.remove();
+ 		        taskFound = true;
+ 		        break;
+ 		    }
+ 		}
+ 		if (!taskFound) {
+             System.out.println("Task not found: " + task);
+         }
+ 		
+ 		String jsonStr = ParseJson.jsonString(jsonList);
+ 		return jsonStr;
+ 	}
 }

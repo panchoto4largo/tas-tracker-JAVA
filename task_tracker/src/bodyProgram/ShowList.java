@@ -43,7 +43,7 @@ public class ShowList {
 	            System.out.println(json.get("description"));
 			}
     	}else {
-    		System.out.println("The list is empty");
+    		System.out.println("The list is empty \n");
     	}
     }
     
