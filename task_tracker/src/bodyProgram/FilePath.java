@@ -1,5 +1,5 @@
 package bodyProgram;
 
 public abstract class  FilePath {
-	protected String filePath = "task.json";
+	protected static String filePath = "task.json";
 }

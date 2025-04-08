@@ -34,6 +34,10 @@ public class ParseJson {
     public List<Map<String, Object>> parseJsonArray(String jsonString) {
         List<Map<String, Object>> list = new ArrayList<>();
 
+        if (jsonString == null || jsonString.trim().isEmpty()) {
+            return list;
+        }
+
         String[] jsonObjects = jsonString.split("(?<=\\}),");
 
         for (String jsonObject : jsonObjects) {
@@ -50,7 +54,7 @@ public class ParseJson {
         if (jsonObject.startsWith("{") && jsonObject.endsWith("}")) {
             jsonObject = jsonObject.substring(1, jsonObject.length() - 1);
         }
-        
+
         String[] keyValuePairs = jsonObject.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
 
         for (String pair : keyValuePairs) {
@@ -59,7 +63,16 @@ public class ParseJson {
             if (keyValue.length == 2) {
                 String key = keyValue[0].replace("\"", "").trim();
                 String value = keyValue[1].replace("\"", "").trim();
-                map.put(key, value);
+
+                if (key.equals("id")) {
+                    try {
+                        map.put(key, Integer.parseInt(value));
+                    } catch (NumberFormatException e) {
+                        map.put(key, 0);
+                    }
+                } else {
+                    map.put(key, value);
+                }
             }
         }
         return map;

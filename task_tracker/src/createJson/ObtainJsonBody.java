@@ -23,12 +23,8 @@ public class ObtainJsonBody extends FilePath{
 	            content = content.substring(1, content.length() - 1);
 	        }
 			
-			if(str != null) {
-				if (!content.isEmpty() ) {
-		            content += "," + str;
-		        } else {
-		            content = str;
-		        }
+			if (str != null && !str.isBlank()) {
+			    content = content.isEmpty() ? str : content + "," + str;
 			}
 		}catch (IOException e) {
 			e.printStackTrace();

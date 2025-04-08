@@ -29,7 +29,7 @@ public class Body {
 	    boolean x = true;
 	    while (x) {
 	        System.out.println("What do you want to do");
-	        System.out.println(" 1. Create a task \n2. Modify a task \n3. Delete a task "
+	        System.out.println("1. Create a task \n2. Modify a task \n3. Delete a task "
 	            + "\n4. Mark in progress \n5. Mark complete"
 	            + "\n6. List tasks"
 	            + "\n7. Close the program");
@@ -38,7 +38,7 @@ public class Body {
 	        try {
 	            option = Integer.parseInt(sc.nextLine());
 	        } catch (NumberFormatException e) {
-	            System.out.println("Por favor, ingresa un número válido.");
+	            System.out.println("\nPlease enter a valid input");
 	            continue;
 	        }
 
@@ -59,7 +59,7 @@ public class Body {
 	            	new ChangeStatement(5);
 	                break;
 	            case 6:
-	                System.out.println("1. List all tasks \n 2. List done tasks \n 3. List in-progress tasks \n 4. List undone tasks");
+	                System.out.println("1. List all tasks \n2. List done tasks \n3. List in-progress tasks \n4. List undone tasks");
 	                int list = Integer.parseInt(sc.nextLine());
 	                ShowList show = new ShowList(list);
 	                break;

@@ -1,16 +1,12 @@
 package createTask;
 
-import java.io.*;
 import java.util.*;
-import java.text.SimpleDateFormat;
-
-
 import createJson.JsonEmpty;
 import createJson.ObtainJsonBody;
-import bodyProgram.FilePath;
+import bodyProgram.ShowList;
 
-public class CreateJsonTask extends FilePath{
-	private static int id = 1;
+public class CreateJsonTask extends CommonFunctions{
+	private int id;
 	private String description;
 	private static String status = "undone";
 	private String createdAt;
@@ -30,6 +26,13 @@ public class CreateJsonTask extends FilePath{
 		
 		System.out.println("What task you have to do?");
 		task = sc.nextLine();
+		
+		while(taskFilter(task)) {
+			System.out.println("What task you have to do?");
+			task = sc.nextLine();
+		}
+		
+		id = createId();
 		
 		jsonMap.put("id", id);
 		jsonMap.put("description", task);
@@ -57,40 +60,62 @@ public class CreateJsonTask extends FilePath{
 
         jsonTask.append("}");
         implementsTask(jsonTask.toString());
-        id++;
     }
 	
-	private void implementsTask(String str) {
-		File file = new File(filePath);
-		
-		JsonEmpty jsonEmptiness = new JsonEmpty();
-		boolean jsonBoolean = jsonEmptiness.JsonIsEmpty();
+	private void implementsTask(String str) {		
+		boolean jsonBoolean = JsonEmpty.JsonIsEmpty();
 		 
 		if(jsonBoolean){
-			try {
-				FileWriter writer = new FileWriter(file);
-				writer.write("[" + str + "]");
-				writer.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			str = "[" + str + "]";
+			writeJson(str);
 		}
 		else {
 			ObtainJsonBody body = new ObtainJsonBody();
 			String content = body.JsonBody(str); 
-			try (FileWriter writer = new FileWriter(file)) {
-                writer.write("[" + content + "]");
-            }catch (FileNotFoundException e) {
-			e.printStackTrace();
-            } catch (IOException e) {
-				e.printStackTrace();
-			}	
+			writeJson("[" + content + "]");
 		}
 	}
 	
+	private int createId() {
+	    List<Map<String, Object>> jsonList = ShowList.returnAllTask();
+	    boolean jsonBoolean = JsonEmpty.JsonIsEmpty();
+
+	    if (jsonBoolean) {
+	        return 1;
+	    } else {
+	        int maxId = 0;
+	        for (Map<String, Object> json : jsonList) {
+	            Object idObject = json.get("id");
+	            if (idObject != null && idObject instanceof Integer) {
+	                int idTask = (Integer) idObject;
+	                if (idTask > maxId) {
+	                    maxId = idTask;
+	                }
+	            }
+	        }
+	        return maxId + 1;
+	    }
+	}
 	
-    private String getCurrentTime() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return sdf.format(new Date());
-    }
+	private Boolean taskFilter(String task) {
+		boolean taskFound = false;
+		List<Map<String, Object>> jsonList = ShowList.returnAllTask();
+		for (Iterator<Map<String, Object>> iterator = jsonList.iterator(); iterator.hasNext(); ) {
+ 		    Map<String, Object> json = iterator.next();
+ 		    
+ 		    if (json.get("description").equals(task)) {
+ 		        taskFound = true;
+ 		        break;
+ 		    }
+ 		}
+ 		if (taskFound) {
+ 			System.out.println("\nYou have another task with that description");
+ 			return true;
+        }
+ 		if(task.length() < 3) {
+ 			System.out.println("\nThe task cant be shorter than 3 words");
+ 			return true;
+ 		}
+ 		return false;
+	}
 }

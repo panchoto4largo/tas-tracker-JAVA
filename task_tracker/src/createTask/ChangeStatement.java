@@ -1,17 +1,11 @@
 package createTask;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
-
-import bodyProgram.FilePath;
 import bodyProgram.ShowList;
 
-public class ChangeStatement extends FilePath{
+public class ChangeStatement extends CommonFunctions{
 	private int toChange;
 	private static final String inProgress = "in-progress";
 	private static final String done = "done";
@@ -21,26 +15,16 @@ public class ChangeStatement extends FilePath{
 		whichTask();
 	}
 	
-
 	private void whichTask() {
-		Scanner sc = new Scanner(System.in);
-		File file = new File(filePath);
-		
 		List<Map<String, Object>> jsonList = ShowList.returnAllTask();
 		
-		System.out.println("\nWhich task do you want to mark? \n");
-		ShowList show = new ShowList(1);
-		String task = sc.nextLine();
+		String msg = "\nWhich task do you want to mark? \n";
+		
+		String task = showMessageAndList(msg);
 		
 		String jsonStr = changeMark(jsonList, task);
 		
-		try {
-			FileWriter writer = new FileWriter(file);
-			writer.write(jsonStr);
-			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		writeJson(jsonStr);
 		
 		System.out.println("The status has been changed.\n");
 	}
@@ -48,7 +32,6 @@ public class ChangeStatement extends FilePath{
 	private String changeMark(List<Map<String, Object>> jsonList, String task) {
 		boolean taskFound = false;
 		for (Iterator<Map<String, Object>> iterator = jsonList.iterator(); iterator.hasNext(); ) {
-			
 		    Map<String, Object> json = iterator.next();
 		    
 		    if (json.get("description").equals(task)) {
@@ -57,6 +40,8 @@ public class ChangeStatement extends FilePath{
 		        }else {
 		        	json.put("status", done);
 		        }
+		        String updatedAt = getCurrentTime();
+		        json.put("updatedAt", updatedAt);
 		        taskFound = true;
 		        break;
 		    }
