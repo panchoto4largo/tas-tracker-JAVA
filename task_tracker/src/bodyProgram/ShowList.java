@@ -40,7 +40,7 @@ public class ShowList {
     private static void showTask(List<Map<String, Object>> jsonList) {
     	if(jsonList.size() != 0) {
 	    	for(Map<String, Object> json : jsonList) {
-	            System.out.println(json.get("description"));
+	            System.out.println(json.get("id") + ".		" + json.get("description"));
 			}
     	}else {
     		System.out.println("The list is empty \n");

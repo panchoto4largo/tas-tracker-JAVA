@@ -96,26 +96,4 @@ public class CreateJsonTask extends CommonFunctions{
 	        return maxId + 1;
 	    }
 	}
-	
-	private Boolean taskFilter(String task) {
-		boolean taskFound = false;
-		List<Map<String, Object>> jsonList = ShowList.returnAllTask();
-		for (Iterator<Map<String, Object>> iterator = jsonList.iterator(); iterator.hasNext(); ) {
- 		    Map<String, Object> json = iterator.next();
- 		    
- 		    if (json.get("description").equals(task)) {
- 		        taskFound = true;
- 		        break;
- 		    }
- 		}
- 		if (taskFound) {
- 			System.out.println("\nYou have another task with that description");
- 			return true;
-        }
- 		if(task.length() < 3) {
- 			System.out.println("\nThe task cant be shorter than 3 words");
- 			return true;
- 		}
- 		return false;
-	}
 }

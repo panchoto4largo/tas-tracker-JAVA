@@ -19,32 +19,47 @@ public class ModifyJsonTask extends CommonFunctions{
 		
 		String msg = "\nWhich task do you want to change";
 		
-		String task = showMessageAndList(msg);
-		
-		String jsonStr = changeDescription(jsonList, task);
+		String jsonStr = changeDescription(jsonList, msg);
 		
 		writeJson(jsonStr);
 	}
 	
-	private String changeDescription(List<Map<String, Object>> jsonList, String task) {
+	private String changeDescription(List<Map<String, Object>> jsonList, String msg) {
 		Scanner sc = new Scanner(System.in);
-		boolean taskFound = false;
-		for (Iterator<Map<String, Object>> iterator = jsonList.iterator(); iterator.hasNext(); ) {
-			
-		    Map<String, Object> json = iterator.next();
-		    
-		    if (json.get("description").equals(task)) {
-		    	System.out.println("\nHow to rename? \n");
-		        String rename = sc.nextLine();
+
+		String task = showMessageAndList(msg);
+	    boolean taskFound = false;
+	    
+	    for (Iterator<Map<String, Object>> iterator = jsonList.iterator(); iterator.hasNext(); ) {
+	        Map<String, Object> json = iterator.next();
+
+	        boolean matchByDescription = task.equals(json.get("description"));
+	        boolean matchById = false;
+
+	        if (task.matches("\\d+")) {
+	                int taskId = Integer.parseInt(task);
+	                Object idObj = json.get("id");
+
+	                if (idObj instanceof Integer && taskId == (Integer) idObj) {
+	                    matchById = true;
+	                }
+	        }
+	        if (matchByDescription || matchById) {
+	        	System.out.println("How to rename?");
+	        	String rename = sc.nextLine();
+	        	while(taskFilter(rename)) {
+	    			System.out.println("How to rename?");
+	    			rename = sc.nextLine();
+	    		}
 		        json.put("description", rename);
 		        taskFound = true;
 		        break;
-		    }
-		}
-		if (!taskFound) {
-            System.out.println("Task not found: " + task);
-        }
-		
+	        }
+	    }
+	    if (!taskFound) {
+	        System.out.println("The task has not been found");
+	    }
+	    
 		String jsonStr = ParseJson.jsonString(jsonList);
 		
 		return jsonStr;
